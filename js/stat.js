@@ -1,6 +1,6 @@
 'use strict';
 
-function getMaxElement(arr) {
+var getMaxElement = function (arr) {
   var max = -1;
   for (var i = 0; i < arr.length; i++) {
     if (max < arr[i]) {
@@ -8,30 +8,22 @@ function getMaxElement(arr) {
     }
   }
   return max;
-}
+};
 
-function getRandomOpacity() {
+var getRandomOpacity = function () {
   var min = 0.1;
   var opacity = Math.random() + min;
   return Number(opacity.toFixed(1));
-}
+};
 
-function getWholeNumber(arr) {
-  for (var i = 0; i < arr.length; i++) {
-    arr[i] = Math.floor(arr[i]);
-  }
-  return arr;
-}
+var getRandomColor = function () {
+  return 'rgba(25, 0, 99, ' + getRandomOpacity() + ')';
+};
 
-function getColorGraph(arr, user, i) {
-  var color;
-  if (arr[i] === user) {
-    color = 'rgba(255, 0, 0, 1)';
-  } else {
-    color = 'rgba(25, 0, 99, ' + getRandomOpacity() + ')';
-  }
-  return color;
-}
+var getColorGraph = function (user) {
+  var userColor = 'rgba(255, 0, 0, 1)';
+  return user ? userColor : getRandomColor();
+};
 
 window.renderStatistics = function (ctx, names, times) {
   ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
@@ -53,15 +45,15 @@ window.renderStatistics = function (ctx, names, times) {
   var lineHeightBottom = 20;
   var lineHeightTop = 5;
 
-  function drawGraph() {
-    getWholeNumber(times);
-    for (var i = 0; i < times.length; i++) {
-      ctx.fillStyle = getColorGraph(names, 'Вы', i);
-      ctx.fillRect(initialX + indent * i, initialY, barWidth, -times[i] * step);
+  var drawGraph = function () {
+    var convertedTimes = times.map(Math.floor);
+    for (var i = 0; i < convertedTimes.length; i++) {
+      ctx.fillStyle = getColorGraph(names[i] === 'Вы');
+      ctx.fillRect(initialX + indent * i, initialY, barWidth, -convertedTimes[i] * step);
       ctx.fillStyle = '#000000';
-      ctx.fillText(times[i], initialX + indent * i, initialY - times[i] * step - lineHeightTop);
+      ctx.fillText(convertedTimes[i], initialX + indent * i, initialY - convertedTimes[i] * step - lineHeightTop);
       ctx.fillText(names[i], initialX + indent * i, initialY + lineHeightBottom);
     }
-  }
+  };
   drawGraph();
 };
