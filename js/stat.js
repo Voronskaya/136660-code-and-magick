@@ -46,7 +46,7 @@ window.renderStatistics = function (ctx, names, times) {
   var lineHeightTop = 5;
 
   var drawGraph = function () {
-    var convertedTimes = times.map(Math.floor);
+    var convertedTimes = times.map(Math.round);
     for (var i = 0; i < convertedTimes.length; i++) {
       ctx.fillStyle = getColorGraph(names[i] === 'Вы');
       ctx.fillRect(initialX + indent * i, initialY, barWidth, -convertedTimes[i] * step);
