@@ -34,11 +34,19 @@ var getFullName = function (name, surname) {
 // }
 // renderListWizard(Wizard(names, surnames, listCoatColors, listEyesColors));
 
-var Wizard = function () {
-  this.name = getFullName(NAMES, SURNAMES);
-  this.coatColor = getRandomElement(COAT_COLORS);
-  this.eyesColor = getRandomElement(EYES_COLORS);
-};
+// var Wizard = function () {
+//   this.name = getFullName(NAMES, SURNAMES);
+//   this.coatColor = getRandomElement(COAT_COLORS);
+//   this.eyesColor = getRandomElement(EYES_COLORS);
+// };
+
+var getWizard = function (name, color1, color2) {
+  return {
+    name: getFullName(name),
+    coatColor: getRandomElement(color1),
+    eyesColor: getRandomElement(color2)
+  }
+}
 
 // Получила массив с объектами.
 // Пробовала здесь не задавать перебор, не получилось.
@@ -73,4 +81,4 @@ var renderWizardList = function (obj) {
   }
   return setupSimilarList.appendChild(fragment);
 };
-renderWizardList(Wizard);
+renderWizardList(getWizard(NAMES, COAT_COLORS, EYES_COLORS));
