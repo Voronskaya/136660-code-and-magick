@@ -25,37 +25,18 @@ var getFullName = function (name, surname) {
   return getRandomElement(name) + ' ' + getRandomElement(surname);
 };
 
-// Не получается сделать ф-ию Wizard чистой. Пробовала этот вариант,
-// но он не работает:
-// var Wizard = function (name, surname, coatColor, eyesColor) {
-//   this.name = getFullName(name, surname);
-//   this.coatColor = getRandomElement(coatColor);
-//   this.eyesColor = getRandomElement(eyesColor);
-// }
-// renderListWizard(Wizard(names, surnames, listCoatColors, listEyesColors));
+var Wizard = function () {
+  this.name = getFullName(NAMES, SURNAMES);
+  this.coatColor = getRandomElement(COAT_COLORS);
+  this.eyesColor = getRandomElement(EYES_COLORS);
+};
 
-// var Wizard = function () {
-//   this.name = getFullName(NAMES, SURNAMES);
-//   this.coatColor = getRandomElement(COAT_COLORS);
-//   this.eyesColor = getRandomElement(EYES_COLORS);
-// };
-
-var getWizard = function (name, color1, color2) {
-  return {
-    name: getFullName(name),
-    coatColor: getRandomElement(color1),
-    eyesColor: getRandomElement(color2)
+var createWizardList = function (length) {
+  var wizardList = [];
+  for (var i = 0; i < length; i++) {
+    wizardList.push(new Wizard());
   }
-}
-
-// Получила массив с объектами.
-// Пробовала здесь не задавать перебор, не получилось.
-var getRandomListObjects = function (Obj, times) {
-  var listObjects = [];
-  for (var i = 0; i < times; i++) {
-    listObjects.push(new Obj());
-  }
-  return listObjects;
+  return wizardList;
 };
 
 var renderWizard = function (obj) {
@@ -70,15 +51,12 @@ var renderWizard = function (obj) {
   return wizardElement;
 };
 
-// Не знаю как избавиться от четверки.
-// Заносила var listWizards в цикл for, но как нужно не работает.
-// Наверное после этого кода, я больше никогда не буду смотреть Гарри Поттера.
-var renderWizardList = function (obj) {
-  var wizardsList = getRandomListObjects(obj, 4);
+var renderWizardList = function () {
+  var wizardsList = createWizardList(4);
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < wizardsList.length; i++) {
     fragment.appendChild(renderWizard(wizardsList[i]));
   }
   return setupSimilarList.appendChild(fragment);
 };
-renderWizardList(getWizard(NAMES, COAT_COLORS, EYES_COLORS));
+renderWizardList(Wizard);
