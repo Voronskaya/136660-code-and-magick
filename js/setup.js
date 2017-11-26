@@ -1,27 +1,24 @@
 'use strict';
 
-var names = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
-var surnames = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
-var listCoatColors = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
-var listEyesColors = ['black', 'red', 'blue', 'yellow', 'green'];
+var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Кристоф', 'Виктор', 'Юлия', 'Люпита', 'Вашингтон'];
+var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
+var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
+var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var setupSimilar = document.querySelector('.setup-similar');
-var similarList = document.querySelector('.setup-similar-list');
+var setupSimilarList = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
-var userDialog = document.querySelector('.setup');
+var setup = document.querySelector('.setup');
 
-userDialog.classList.remove('hidden');
+setup.classList.remove('hidden');
 setupSimilar.classList.remove('hidden');
 
-var getRandomNumber = function (arr) {
-  return Math.floor(Math.random() * arr.length);
+var getRandomNumber = function (length) {
+  return Math.floor(Math.random() * length);
 };
 
 var getRandomElement = function (arr) {
-  for (var i = 0; i < arr.length; i++) {
-    var randomIndex = getRandomNumber(arr);
-    var item = arr[randomIndex];
-  }
-  return item;
+  var randomIndex = getRandomNumber(arr.length);
+  return arr[randomIndex];
 };
 
 var getFullName = function (name, surname) {
@@ -38,9 +35,9 @@ var getFullName = function (name, surname) {
 // renderListWizard(Wizard(names, surnames, listCoatColors, listEyesColors));
 
 var Wizard = function () {
-  this.name = getFullName(names, surnames);
-  this.coatColor = getRandomElement(listCoatColors);
-  this.eyesColor = getRandomElement(listEyesColors);
+  this.name = getFullName(NAMES, SURNAMES);
+  this.coatColor = getRandomElement(COAT_COLORS);
+  this.eyesColor = getRandomElement(EYES_COLORS);
 };
 
 // Получила массив с объектами.
@@ -55,11 +52,11 @@ var getRandomListObjects = function (Obj, times) {
 
 var renderWizard = function (obj) {
   var wizardElement = similarWizardTemplate.cloneNode(true);
-  var similarNameList = wizardElement.querySelector('.setup-similar-label');
+  var similarNameWizard = wizardElement.querySelector('.setup-similar-label');
   var similarWizardCoat = wizardElement.querySelector('.wizard-coat');
   var similarWizardEye = wizardElement.querySelector('.wizard-eyes');
 
-  similarNameList.textContent = obj.name;
+  similarNameWizard.textContent = obj.name;
   similarWizardCoat.style.fill = obj.coatColor;
   similarWizardEye.style.fill = obj.eyesColor;
   return wizardElement;
@@ -68,12 +65,12 @@ var renderWizard = function (obj) {
 // Не знаю как избавиться от четверки.
 // Заносила var listWizards в цикл for, но как нужно не работает.
 // Наверное после этого кода, я больше никогда не буду смотреть Гарри Поттера.
-var renderListWizard = function (obj) {
-  var listWizards = getRandomListObjects(obj, 4);
+var renderWizardList = function (obj) {
+  var wizardsList = getRandomListObjects(obj, 4);
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < listWizards.length; i++) {
-    fragment.appendChild(renderWizard(listWizards[i]));
+  for (var i = 0; i < wizardsList.length; i++) {
+    fragment.appendChild(renderWizard(wizardsList[i]));
   }
-  return similarList.appendChild(fragment);
+  return setupSimilarList.appendChild(fragment);
 };
-renderListWizard(Wizard);
+renderWizardList(Wizard);
