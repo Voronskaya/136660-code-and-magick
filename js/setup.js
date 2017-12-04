@@ -4,12 +4,15 @@ var NAMES = ['Иван', 'Хуан Себастьян', 'Мария', 'Крис�
 var SURNAMES = ['да Марья', 'Верон', 'Мирабелла', 'Вальц', 'Онопко', 'Топольницкая', 'Нионго', 'Ирвинг'];
 var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161)', 'rgb(56, 159, 117)', 'rgb(215, 210, 55)', 'rgb(0, 0, 0)'];
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 var setupSimilar = document.querySelector('.setup-similar');
 var setupSimilarList = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
 var setup = document.querySelector('.setup');
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = document.querySelector('.setup-close');
 
-setup.classList.remove('hidden');
 setupSimilar.classList.remove('hidden');
 
 var getRandomNumber = function (length) {
@@ -25,16 +28,18 @@ var getFullName = function (name, surname) {
   return getRandomElement(name) + ' ' + getRandomElement(surname);
 };
 
-var Wizard = function () {
-  this.name = getFullName(NAMES, SURNAMES);
-  this.coatColor = getRandomElement(COAT_COLORS);
-  this.eyesColor = getRandomElement(EYES_COLORS);
+var getWizard = function () {
+  return {
+    name: getFullName(NAMES, SURNAMES),
+    coatColor: getRandomElement(COAT_COLORS),
+    eyesColor: getRandomElement(EYES_COLORS)
+  };
 };
 
 var createWizardList = function (length) {
   var wizardList = [];
   for (var i = 0; i < length; i++) {
-    wizardList.push(new Wizard());
+    wizardList.push(getWizard());
   }
   return wizardList;
 };
@@ -59,4 +64,35 @@ var renderWizardList = function () {
   }
   setupSimilarList.appendChild(fragment);
 };
+
+var onPopupEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closePopup();
+  }
+};
+
+var onPopupEnterPress = function (evt) {
+  if (evt.keyCode === ENTER_KEYCODE) {
+    openPopup();
+  }
+};
+
+var openPopup = function () {
+  setup.classList.remove('hidden');
+  document.addEventListener('keydown', onPopupEscPress);
+};
+
+var closePopup = function () {
+  setup.classList.add('hidden');
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+setupOpen.addEventListener('keydown', onPopupEnterPress);
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
 renderWizardList();
