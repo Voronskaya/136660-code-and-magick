@@ -6,14 +6,15 @@ var COAT_COLORS = ['rgb(101, 137, 164)', 'rgb(241, 43, 107)', 'rgb(146, 100, 161
 var EYES_COLORS = ['black', 'red', 'blue', 'yellow', 'green'];
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
-var setupSimilar = document.querySelector('.setup-similar');
-var setupSimilarList = document.querySelector('.setup-similar-list');
+var setupSimilarElement = document.querySelector('.setup-similar');
+var setupSimilarListElement = document.querySelector('.setup-similar-list');
 var similarWizardTemplate = document.querySelector('#similar-wizard-template').content;
-var setup = document.querySelector('.setup');
-var setupOpen = document.querySelector('.setup-open');
-var setupClose = document.querySelector('.setup-close');
+var setupElement = document.querySelector('.setup');
+var setupOpenElement = document.querySelector('.setup-open');
+var setupCloseElement = document.querySelector('.setup-close');
+var setupUserNameElement = document.querySelector('.setup-user-name');
 
-setupSimilar.classList.remove('hidden');
+setupSimilarElement.classList.remove('hidden');
 
 var getRandomNumber = function (length) {
   return Math.floor(Math.random() * length);
@@ -62,36 +63,40 @@ var renderWizardList = function () {
   for (var i = 0; i < wizardsList.length; i++) {
     fragment.appendChild(renderWizard(wizardsList[i]));
   }
-  setupSimilarList.appendChild(fragment);
+  setupSimilarListElement.appendChild(fragment);
 };
 
-var onPopupEscPress = function (evt) {
-  if (evt.keyCode === ESC_KEYCODE) {
-    closePopup();
-  }
+var checkFocusUserName = function () {
+  return document.activeElement === setupUserNameElement;
 };
 
-var onPopupEnterPress = function (evt) {
+var keyDownHandler = function (evt) {
   if (evt.keyCode === ENTER_KEYCODE) {
     openPopup();
+  } else if (evt.keyCode === ESC_KEYCODE) {
+    if (!checkFocusUserName()) {
+      closePopup();
+    }
   }
 };
 
 var openPopup = function () {
-  setup.classList.remove('hidden');
-  document.addEventListener('keydown', onPopupEscPress);
+  setupElement.classList.remove('hidden');
+  document.addEventListener('keydown', keyDownHandler);
 };
 
 var closePopup = function () {
-  setup.classList.add('hidden');
-  document.removeEventListener('keydown', onPopupEscPress);
+  setupElement.classList.add('hidden');
+  document.removeEventListener('keydown', keyDownHandler);
 };
 
-setupOpen.addEventListener('click', function () {
+setupOpenElement.addEventListener('click', function () {
   openPopup();
 });
-setupOpen.addEventListener('keydown', onPopupEnterPress);
-setupClose.addEventListener('click', function () {
+
+setupOpenElement.addEventListener('keydown', keyDownHandler);
+
+setupCloseElement.addEventListener('click', function () {
   closePopup();
 });
 
